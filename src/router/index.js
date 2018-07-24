@@ -24,20 +24,8 @@ export default new Router({
         {
           path: '/notice',
           component: resolve => require(['../components/page/Notice.vue'],resolve)
-        },
-        {
-          path: '/casemarkdown',
-          component: resolve => require(['../components/page/CaseMarkdown.vue'], resolve)
-        },
-        {
-          path: '/newsmarkdown',
-          component: resolve => require(['../components/page/NewsMarkdown.vue'], resolve)
         }
       ]
-    },
-    {
-      path: '/login',
-      component: resolve => require(['../components/page/Login.vue'], resolve)
     }
   ]
 })
