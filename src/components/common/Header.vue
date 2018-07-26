@@ -27,13 +27,13 @@
     export default {
         data() {
             return {
-                collapse: true,
-                name: 'linxin',
-                message: 2
+                collapse: false,
+                name: 'Krystal'
             }
         },
         computed:{
-            username(){
+            username() {
+                //计算属性username直接用{{}}写在相应的HTML，不用写在data()里
                 let username = localStorage.getItem('ms_username');
                 return username ? username : this.name;
             }
@@ -49,6 +49,7 @@
             // 侧边栏折叠
             collapseChage(){
                 this.collapse = !this.collapse;
+                // 通过Event Bus 进行组件间通信，来折叠侧边栏
                 bus.$emit('collapse', this.collapse);
             },
         },

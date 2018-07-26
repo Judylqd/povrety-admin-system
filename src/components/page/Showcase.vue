@@ -11,10 +11,10 @@
                 <el-row>
                     <el-col :span="6" v-for="(item, index) in items.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
                         <el-card :body-style="{ padding: '0px' }">
-                            <img :src="item.src" class="image">
+                            <img :src="item.img" class="image">
                             <div style="padding: 14px;">
                                 <div class="bottom clearfix">
-                                    <span>{{ item.title }}</span>
+                                    <span>{{ item.caseName }}</span>
                                     <el-button type="text" class="button" @click="handleDelete(index)">删除</el-button>
                                     <el-button type="text" class="button" @click="handleEdit(index)">编辑</el-button>
                                 </div>
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+    import {getCaseList} from '../../api.js'
     export default {
         name: 'showcase',
         data() {
@@ -59,88 +60,12 @@
                 total: 0,
                 items: [
                     {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例一"
+                        img: "../../../static/img/img.jpg",
+                        caseName: "案例一"
                     },
                     {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例二"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例三"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例四"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例五"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例一"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例二"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例三"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例四"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例五"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例一"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例二"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例三"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例四"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例五"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例一"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例二"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例三"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例四"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例五"
-                    },
-                    {
-                        src: "../../../static/img/img.jpg",
-                        title: "案例五"
+                        img: "../../../static/img/img.jpg",
+                        caseName: "案例二"
                     }
                 ]
             }
@@ -171,6 +96,7 @@
             },
             //确认删除
             deleteRow() {
+                // 删除请求
                 this.items.splice(this.idx,1);
                 this.$message.success('删除成功');
                 this.delVisible = false;
@@ -178,11 +104,14 @@
             }
         },
         mounted: function() {
-            this.total = this.items.length;
+            getCaseList().then(res => {
+                let lists = res.parse(res);  // 将返回的json数组转化对象数组
+                this.items = lists;
+            });
         },
         watch: {
             items: function(val) {
-                this.total = val.length;
+                this.total = val.length;  // 实时更新分页总条数
             }
         }
     }
