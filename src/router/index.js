@@ -7,7 +7,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/showcase'
+      redirect: '/showcase'  // 重定向
     },
     {
       path: '/',
@@ -30,8 +30,8 @@ export default new Router({
           component: resolve => require(['../components/page/CaseMarkdown.vue'], resolve)
         },
         {
-          path: '/newsmarkdown',
-          component: resolve => require(['../components/page/NewsMarkdown.vue'], resolve)
+          path: '/newsnoticemarkdown',
+          component: resolve => require(['../components/page/NewsNoticeMarkdown.vue'], resolve)
         }
       ]
     },

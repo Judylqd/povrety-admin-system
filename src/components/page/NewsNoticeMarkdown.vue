@@ -9,7 +9,10 @@
         <div class="container">
             <div class="plugins-tips">
                 <p>
-                    编辑人：<input type="text" v-model="editor" placeholder="请输入编辑人">
+                    新闻标题：<input type="text" v-model="newsTitle" placeholder="请输入新闻标题">
+                </p>
+                <p>
+                    新闻编辑人：<input type="text" v-model="editor" placeholder="请输入编辑人">
                 </p>
             </div>
             <mavon-editor v-model="content" ref="md" @imgAdd="$imgAdd" @change="change" style="min-height: 600px" class="editor"/>
@@ -26,6 +29,7 @@
         data() {
             return {
                 editor: '', //编辑人
+                newsTitle: '',
                 content:'',
                 html:'<h1>make</h1>',
                 configs: {

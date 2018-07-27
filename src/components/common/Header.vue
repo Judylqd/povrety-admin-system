@@ -43,6 +43,7 @@
             handleCommand(command) {
                 if(command == 'loginout'){
                     localStorage.removeItem('ms_username')
+                    localStorage.removeItem('timeout')
                     this.$router.push('/login');
                 }
             },

@@ -15,8 +15,8 @@
                             <div style="padding: 14px;">
                                 <div class="bottom clearfix">
                                     <span>{{ item.caseName }}</span>
-                                    <el-button type="text" class="button" @click="handleDelete(index)">删除</el-button>
-                                    <el-button type="text" class="button" @click="handleEdit(index)">编辑</el-button>
+                                    <el-button type="text" class="button" @click="handleDelete(item,index)">删除</el-button>
+                                    <el-button type="text" class="button" @click="handleEdit(item,index)">编辑</el-button>
                                 </div>
                             </div>
                         </el-card>
@@ -47,12 +47,13 @@
 </template>
 
 <script>
-    import {getCaseList} from '../../api.js'
+    import {getCaseList, deleteCase} from '../../api.js'
     export default {
         name: 'showcase',
         data() {
             return {
                 idx: -1,
+                del_case: {},
                 delVisible: false,
                 //分页
                 currentPage: 1,
@@ -71,6 +72,13 @@
             }
         },
         methods: {
+            getArticle() {
+                getCaseList().then(res => {
+                    // 返回值数组
+                    console.log(res);
+                    this.items = res;
+                })
+            },
             handleSizeChange(pagesize) {
                 console.log(`每页 ${pagesize} 条`);
             },
@@ -89,25 +97,32 @@
                     path: '/casemarkdown'
                 })
             },
-            handleDelete(index) {
+            handleDelete(item,index) {
                 console.log(index);
+                this.del_case = item;
                 this.idx = index;
                 this.delVisible = true;
             },
             //确认删除
             deleteRow() {
                 // 删除请求
-                this.items.splice(this.idx,1);
-                this.$message.success('删除成功');
-                this.delVisible = false;
-                // this.total = this.items.length;
+                // console.log(this.del_case);
+                // let params = this.del_case.cid;  // 要确定cid的数据类型
+                // deleteCase(params).then(res => {
+                //     // 返回值是字符串
+                //     console.log(res)
+                //     this.delVisible = false;
+                //     this.getArticle()
+                // })
+                // 前端假删除
+                // this.items.splice(this.idx,1);
+                // this.$message.success('删除成功');
+                // this.delVisible = false;
             }
         },
-        mounted: function() {
-            getCaseList().then(res => {
-                let lists = res.parse(res);  // 将返回的json数组转化对象数组
-                this.items = lists;
-            });
+        mounted() {
+            // 获取数据列表
+            // this.getArticle();
         },
         watch: {
             items: function(val) {

@@ -6,19 +6,10 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <!-- <ul>
-                <li v-for="(item, index) in items" :key=index class="news-li">
-                    <img :src="item.src" alt="" class="news-img">
-                    <div class="news-describe">
-                        <h5>{{ item.title }}</h5>
-                        <p>{{ item.content }}</p>
-                    </div>
-                </li>
-            </ul> -->
             <template>
                 <div style="margin-top: 20px">
-                    <!-- <el-button type="primary" @click="delAll()">批量删除</el-button>
-                    <el-button @click="toggleSelection()">取消选择</el-button> -->
+                    <el-button type="primary" @click="delAll()">批量删除</el-button>
+                    <el-button @click="toggleSelection()">取消选择</el-button>
                     <el-button type="primary" @click="addNews">添加新闻</el-button>
                 </div>
                 <el-table
@@ -26,20 +17,21 @@
                     :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                     tooltip-effect="dark"
                     style="width: 100%">
-                    <!-- <el-table-column
+                    <el-table-column
                     type="selection"
                     width="30">
-                    </el-table-column> -->
+                    </el-table-column>
                     <el-table-column
-                    width="120">
-                        <template slot-scope="scope">
-                            <img :src="scope.row.src" class="news-img">
-                        </template>
+                        label="全选"
+                        prop="time"
+                        width="180">
+                    </el-table-column>
+                    <el-table-column
+                    prop="newsTitle"
+                        width="180">
                     </el-table-column>
                     <el-table-column>
                         <template slot-scope="scope">
-                            <h4>{{ scope.row.title }}</h4>
-                            <p>{{ scope.row.content }}</p>
                             <i class="el-icon-edit" @click="handleEdit(scope.$index,scope.row)"></i>
                             <i class="el-icon-delete" @click="handleDelete(scope.$index,scope.row)"></i>
                         </template>
@@ -71,7 +63,7 @@
 
 <script>
     export default {
-        name: 'new',
+        name: 'news',
         data () {
             return {
                 delVisible: false,
@@ -81,80 +73,68 @@
                 total: 0,
                 tableData: [
                     {
-                        src: '../../../static/img/img.jpg',
-                        title: '新闻一',
-                        content: '近日，姜文带着他的“民国三部曲”收官之作《邪不压正》归来了，上两部分别是《让子弹飞》和《一步之遥》。观众则对电影给出了好评：“三部姜文电影，就是半个民国史”。这部电影上映当天，票房便破亿。'
+                        newsTitle: '新闻一',
+                        time: '2018/7/26'
                     }, {
-                        src: '../../../static/img/img.jpg',
-                        title: '新闻二',
-                        content: '近日，姜文带着他的“民国三部曲”收官之作《邪不压正》归来了，上两部分别是《让子弹飞》和《一步之遥》。观众则对电影给出了好评：“三部姜文电影，就是半个民国史”。这部电影上映当天，票房便破亿。'
+                        newsTitle: '新闻二',
+                        time: '2018/7/26'
                     }, {
-                        src: '../../../static/img/img.jpg',
-                        title: '新闻三',
-                        content: '近日，姜文带着他的“民国三部曲”收官之作《邪不压正》归来了，上两部分别是《让子弹飞》和《一步之遥》。观众则对电影给出了好评：“三部姜文电影，就是半个民国史”。这部电影上映当天，票房便破亿。'
+                        newsTitle: '新闻三',
+                        time: '2018/7/26'
                     }, {
-                        src: '../../../static/img/img.jpg',
-                        title: '新闻四',
-                        content: '近日，姜文带着他的“民国三部曲”收官之作《邪不压正》归来了，上两部分别是《让子弹飞》和《一步之遥》。观众则对电影给出了好评：“三部姜文电影，就是半个民国史”。这部电影上映当天，票房便破亿。'
+                        newsTitle: '新闻四',
+                        time: '2018/7/26'
                     }, {
-                        src: '../../../static/img/img.jpg',
-                        title: '新闻五',
-                        content: '近日，姜文带着他的“民国三部曲”收官之作《邪不压正》归来了，上两部分别是《让子弹飞》和《一步之遥》。观众则对电影给出了好评：“三部姜文电影，就是半个民国史”。这部电影上映当天，票房便破亿。'
+                        newsTitle: '新闻五',
+                        time: '2018/7/26'
                     }, {
-                        src: '../../../static/img/img.jpg',
-                        title: '新闻六',
-                        content: '近日，姜文带着他的“民国三部曲”收官之作《邪不压正》归来了，上两部分别是《让子弹飞》和《一步之遥》。观众则对电影给出了好评：“三部姜文电影，就是半个民国史”。这部电影上映当天，票房便破亿。'
+                        newsTitle: '新闻六',
+                        time: '2018/7/26'
                     }, {
-                        src: '../../../static/img/img.jpg',
-                        title: '新闻七',
-                        content: '近日，姜文带着他的“民国三部曲”收官之作《邪不压正》归来了，上两部分别是《让子弹飞》和《一步之遥》。观众则对电影给出了好评：“三部姜文电影，就是半个民国史”。这部电影上映当天，票房便破亿。'
+                        newsTitle: '新闻七',
+                        time: '2018/7/26'
                     }, {
-                        src: '../../../static/img/img.jpg',
-                        title: '新闻八',
-                        content: '近日，姜文带着他的“民国三部曲”收官之作《邪不压正》归来了，上两部分别是《让子弹飞》和《一步之遥》。观众则对电影给出了好评：“三部姜文电影，就是半个民国史”。这部电影上映当天，票房便破亿。'
+                        newsTitle: '新闻八',
+                        time: '2018/7/26'
                     }, {
-                        src: '../../../static/img/img.jpg',
-                        title: '新闻九',
-                        content: '近日，姜文带着他的“民国三部曲”收官之作《邪不压正》归来了，上两部分别是《让子弹飞》和《一步之遥》。观众则对电影给出了好评：“三部姜文电影，就是半个民国史”。这部电影上映当天，票房便破亿。'
+                        newsTitle: '新闻九',
+                        time: '2018/7/26'
                     }, {
-                        src: '../../../static/img/img.jpg',
-                        title: '新闻十',
-                        content: '近日，姜文带着他的“民国三部曲”收官之作《邪不压正》归来了，上两部分别是《让子弹飞》和《一步之遥》。观众则对电影给出了好评：“三部姜文电影，就是半个民国史”。这部电影上映当天，票房便破亿。'
+                        newsTitle: '新闻十',
+                        time: '2018/7/26'
                     }, {
-                        src: '../../../static/img/img.jpg',
-                        title: '新闻十一',
-                        content: '近日，姜文带着他的“民国三部曲”收官之作《邪不压正》归来了，上两部分别是《让子弹飞》和《一步之遥》。观众则对电影给出了好评：“三部姜文电影，就是半个民国史”。这部电影上映当天，票房便破亿。'
+                        newsTitle: '新闻十一',
+                        time: '2018/7/26'
                     }, {
-                        src: '../../../static/img/img.jpg',
-                        title: '新闻十二',
-                        content: '近日，姜文带着他的“民国三部曲”收官之作《邪不压正》归来了，上两部分别是《让子弹飞》和《一步之遥》。观众则对电影给出了好评：“三部姜文电影，就是半个民国史”。这部电影上映当天，票房便破亿。'
+                        newsTitle: '新闻十二',
+                        time: '2018/7/26'
                     }
                 ],
                 multipleSelection: []
             }
         },
         methods: {
-            // toggleSelection(rows) {
-            //     console.log(this.$refs.multipleTable)
-            //     if (rows) {
-            //     rows.forEach(row => {
-            //         this.$refs.multipleTable.toggleRowSelection(row);
-            //     });
-            //     } else {
-            //     this.$refs.multipleTable.clearSelection();
-            //     }
-            // },
-            // handleSelectionChange(val) {
-            //     this.multipleSelection = val; // 选中的行
-            // },
+            toggleSelection(rows) {
+                console.log(this.$refs.multipleTable)
+                if (rows) {
+                rows.forEach(row => {
+                    this.$refs.multipleTable.toggleRowSelection(row);
+                });
+                } else {
+                this.$refs.multipleTable.clearSelection();
+                }
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val; // 选中的行
+            },
             addNews() {
                 this.$router.push({
-                    path: '/newsMarkdown'
+                    path: '/newsnoticemarkdown'
                 })
             },
             handleEdit(index,row) {
                 this.$router.push({
-                    path: '/newsmarkdown'
+                    path: '/newsnoticemarkdown'
                 })
             },
             handleDelete(index, row) {
@@ -188,11 +168,6 @@
 </script>
 
 <style scoped>
-    .news-img {
-        display: block;
-        border-radius: 5px;
-        width: 100%;
-    }
     .el-icon-delete {
         margin-left: 10px;
     }
