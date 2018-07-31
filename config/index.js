@@ -10,7 +10,18 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      // webpack跨域解决
+      '/': {
+        // gateway apis
+        target: 'http://123.207.13.37:8080/', // 接口域名
+        changeOrigin: true, //是否跨域
+        secure: false,
+        pathRewrite: {
+            '^/': '' //需要rewrite重写的,
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

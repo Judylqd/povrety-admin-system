@@ -6,6 +6,52 @@
             </el-breadcrumb>
         </div>
         <div class="container">
+            <!-- <template>
+                <div style="margin-top: 20px">
+                    <el-button type="primary" @click="delAll()">批量删除</el-button>
+                    <el-button @click="toggleSelection()">取消选择</el-button>
+                    <el-button type="primary" @click="addCase">添加案例</el-button>
+                </div>
+                <el-table
+                    ref="multipleTable"
+                    :data="items.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+                    tooltip-effect="dark"
+                    style="width: 100%">
+                    <el-table-column
+                    type="selection"
+                    width="30">
+                    </el-table-column>
+                    <el-table-column
+                    label="全选"
+                    prop="img"
+                    width="120">
+                        <template slot-scope="scope">
+                            <img :src="scope.row.img" class="news-img">
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                    prop='caseName'
+                    width="120">
+                    </el-table-column>
+                    <el-table-column>
+                        <template slot-scope="scope">
+                            <el-button type="text" class="button" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
+                            <el-button type="text" class="button" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="block">
+                    <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 20, 30]"
+                    :page-size="pagesize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total">
+                    </el-pagination>
+                </div> 
+            </template> -->
             <el-button type="primary" icon="add" @click="addCase" >添加案例</el-button>
             <div class="show-box">
                 <el-row>
@@ -75,7 +121,6 @@
             getArticle() {
                 getCaseList().then(res => {
                     // 返回值数组
-                    console.log(res);
                     this.items = res;
                 })
             },
@@ -89,16 +134,22 @@
             //点击案例按钮跳转markdown
             addCase() {
                 this.$router.push({
-                    path: '/casemarkdown'
+                    path: '/casemarkdown',
+                    query: {
+                        type: 'add'
+                    }
                 })
             },
-            handleEdit(index) {
+            handleEdit(item,index) {
                 this.$router.push({
-                    path: '/casemarkdown'
+                    path: '/casemarkdown',
+                    query: {
+                        type: 'edit',
+                        cid: item.cid
+                    }
                 })
             },
             handleDelete(item,index) {
-                console.log(index);
                 this.del_case = item;
                 this.idx = index;
                 this.delVisible = true;
@@ -106,23 +157,18 @@
             //确认删除
             deleteRow() {
                 // 删除请求
-                // console.log(this.del_case);
-                // let params = this.del_case.cid;  // 要确定cid的数据类型
-                // deleteCase(params).then(res => {
-                //     // 返回值是字符串
-                //     console.log(res)
-                //     this.delVisible = false;
-                //     this.getArticle()
-                // })
-                // 前端假删除
-                // this.items.splice(this.idx,1);
-                // this.$message.success('删除成功');
-                // this.delVisible = false;
+                let params = this.del_case.cid;  // 要确定cid的数据类型
+                deleteCase(params).then(res => {
+                    // 返回值是字符串
+                    this.$message.success(res);
+                    this.delVisible = false;
+                    this.getArticle()
+                })
             }
         },
         mounted() {
             // 获取数据列表
-            // this.getArticle();
+            this.getArticle();
         },
         watch: {
             items: function(val) {
@@ -147,7 +193,7 @@
         line-height: 12px;
     }
 
-  .button {
+    .button {
         padding: 0;
         float: right;
     }

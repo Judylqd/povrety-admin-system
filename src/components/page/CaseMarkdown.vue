@@ -3,7 +3,6 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-edit"></i>案例</el-breadcrumb-item>
-                <el-breadcrumb-item>新建案例</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
@@ -12,8 +11,12 @@
                     标题：<input type="text" v-model="title" placeholder="请输入标题">
                 </p>
             </div>
+            <div>
+                <span>原图：</span>
+                <img :src="imgUrl" alt="">
+            </div>
             <el-upload
-                action="https://jsonplaceholder.typicode.com/posts/"
+                :action="url"
                 list-type="picture-card"
                 :before-upload="beforeAvatarUpload"
                 :on-success="handlePictureSuccess"
@@ -24,6 +27,7 @@
             <el-dialog :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
+            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过5M</div>
             <mavon-editor v-model="content" ref="md" @imgAdd="$imgAdd" @change="change" style="min-height: 600px" class="editor"/>
             <el-button class="editor-btn" type="primary" @click="submit">提交</el-button>
         </div>
@@ -31,36 +35,31 @@
 </template>
 
 <script>
+    import { addCase, getCaseDetail, updateCase } from '../../api.js'
     import { mavonEditor } from 'mavon-editor'
     import 'mavon-editor/dist/css/index.css'
     export default {
         name: 'markdown',
         data() {
             return {
-                title: '',
-                content:'',
-                html:'<h1>make</h1>',
+                cid: '',  // case的cid
+                imgUrl: '',
+                url: '/'+ 'upload',
+                title: '',   // 标题
+                content:'', // markdown语法文本
                 //上传图片的URL和显示
-                dialogImageUrl: '',
+                dialogImageUrl: '',  // 上传图片的URL
                 dialogVisible: false,
-                //isShow
-                isShow: true,
-                configs: {
-                }
+                html:'<h1>make</h1>',
+                fileList: []
             }
         },
         components: {
             mavonEditor
         },
-        computed: {
-            hideShow() {
-
-            }
-        },
         methods: {
             // 限制上传图片的大小和格式
             beforeAvatarUpload(file) {
-                console.log(file);
                 const isJPG = file.type === 'image/jpeg';
                 const isPNG = file.type === 'image/png';
                 const isJP = isJPG || isPNG;   //上传图片是两者中的一种都不截止上传
@@ -74,23 +73,29 @@
                 }
                 return isJP && isLt5M;
             },
-            handlePictureSuccess(file) {
+            handlePictureSuccess(response,file,fileList) {
+                console.log(this.fileList)
+                let obj = document.getElementsByClassName("el-upload el-upload--picture-card")[0];
+                // getElementsByClassName取的是一个数组
+                obj.style.display = 'none';
+                this.dialogImageUrl = response;   // 后台返回的图片URL
             },
             handlePictureCardPreview(file) {
-                console.log(file);
-                this.dialogImageUrl = file.url;
-                this.dialogVisible = true;
+                this.dialogVisible = true;  // 封面图片上传成功后，显示图片
             },
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
+            handleRemove(file,fileList) {
+                let obj = document.getElementsByClassName("el-upload el-upload--picture-card")[0];
+                obj.style.display = 'inline-block';
+                console.log(file);
+                console.log(fileList);
             },
             // 将图片上传到服务器，返回地址替换到md中
             $imgAdd(pos, $file){
                 var formdata = new FormData();
                 formdata.append('file', $file);
-                // 这里没有服务器供大家尝试，可将下面上传接口替换为你自己的服务器接口
+                // 服务器接口
                 this.$axios({
-                    url: '/common/upload',
+                    url: 'http://123.207.13.37:8080/upload',
                     method: 'post',
                     data: formdata,
                     headers: { 'Content-Type': 'multipart/form-data' },
@@ -102,14 +107,55 @@
                 // render 为 markdown 解析后的结果
                 this.html = render;
             },
+            getEdit() {
+                let typeSelect = this.$route.query.type;
+                this.cid = this.$route.query.cid;
+                if (typeSelect == 'edit') {  // 判断是编辑还是新增
+                    getCaseDetail(this.cid).then(res => {
+                        this.title = res.caseName;
+                        this.imgUrl = res.img;
+                        this.content = res.markdown;
+                    })
+                }
+            },
             submit(){
-                console.log(this.title);
-                
-                console.log(this.content);
-                console.log(this.html);
-                console.log(this.$refs.md);
-                this.$message.success('提交成功！');
+                let typeSelect = this.$route.query.type;
+                if (typeSelect == 'edit') {  // 判断是编辑还是新增
+                    let img;
+                    if (this.dialogImageUrl=='') {
+                        img = this.imgUrl;
+                    } else {
+                        img = this.dialogImageUrl;
+                    }
+                    let params2 = { // 修改传参
+                        cid: this.cid,
+                        caseName: this.title,
+                        img: img,
+                        markdown: this.content
+                    }
+                    updateCase(params2).then(res => {
+                        this.$message.success(res);
+                    }).catch(err => {
+                        this.$message.error(err);
+                    })
+                }
+                else if (typeSelect == 'add') {
+                    
+                    let params1 = { // 添加传参
+                        caseName: this.title,
+                        img: this.dialogImageUrl,
+                        markdown: this.content
+                    }
+                    addCase(params1).then(res => {
+                    this.$message.success(res);
+                    }).catch(err => {
+                        this.$message.error(err);
+                    })
+                }
             }   
+        },
+        mounted() {
+            this.getEdit();
         }
     }
 </script>
@@ -120,14 +166,18 @@
     .editor-btn {
         margin-top: 20px;
     }
-    .plugins-tips {
+    /* .plugins-tips {
         text-align: center;
-    }
+    }*/
     .pic {
-        display: flex;
-        justify-content: center;
-    }
+        /* display: flex;
+        justify-content: center; */
+        margin-top: 10px;
+    } 
     .editor {
         margin-top: 20px;
+    }
+    .disabled {
+        display: none;
     }
 </style>

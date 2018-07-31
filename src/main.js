@@ -14,7 +14,7 @@ router.beforeEach((to, from, next) => {
   const time = localStorage.getItem('timeout');
   if (!role && to.path !== '/login') {
     next('/login');
-  } else if (time && time < new Date().getTime()) {  // 先判断time是否存在，退出登录就不存在了，登录状态过期检测
+  } else if (time && time < new Date().getTime() && to.path !== '/login') {  // 先判断time是否存在，退出登录就不存在了，登录状态过期检测
     next('/login');
   } else {
     next();

@@ -54,42 +54,43 @@
                 //$refs[forName]取refs属性中的forName
                 this.$refs[formName].validate((valid) => {  //validate()验证rules规则
                     if (valid) {
-                        localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/');
+                        // localStorage.setItem('ms_username',this.ruleForm.username);
+                        // this.$router.push('/');
                         // 登录验证
-                        // let params = {
-                        //     username: this.ruleForm.username,
-                        //     password: Base64.encode(this.ruleForm.password), // 密码base64加密
-                        //     vali: this.ruleForm.vali
-                        // }
-                        // login(Qs.stringify(params),{
-                        //     header: {
-                        //         'Content-Type': 'application/x-www-form-urlencoded', 
-                        //     }
-                        // }).then(res => {
-                        //     localStorage.setItem('ms_username',this.ruleForm.username);
-                        //     this.$router.push('/');
-                        //     console.log(res);
-                        //     let arr = [];
-                        //     for (let key in res) {
-                        //         arr.push(key);
-                        //         if (key == 0) {
-                        //             // localstroage保存用户名
-                        //             localStorage.setItem('ms_username',this.ruleForm.username);
-                        //             // 登录状态一天过期，后台返回的“登录时间+一天”的时间戳保存到localstorage
-                        //             localStorage.setItem('timeout',res[key]);
-                        //             this.$router.push('/');
-                        //         } else if (key == 1) {
-                        //             this.$message.error(res[key]);
-                        //         } else if (key == 2) {
-                        //             this.$message.error(res[key])
-                        //             // 验证码错误的时候刷新验证码
-                        //             getVerifyImg().then(res => {
-                        //                 this.imgSrc = res;
-                        //             })
-                        //         }
-                        //     }
-                        // })    
+                        let params = {
+                            username: this.ruleForm.username,
+                            password: Base64.encode(this.ruleForm.password), // 密码base64加密
+                            vali: this.ruleForm.vali
+                        }
+                        login(Qs.stringify(params),{
+                            header: {
+                                'Content-Type': 'application/x-www-form-urlencoded', 
+                            }
+                        }).then(res => {
+                            console.log(res);
+                            let arr = [];
+                            for (let key in res) {
+                                arr.push(key);
+                                if (key == 0) {
+                                    // localstroage保存用户名
+                                    localStorage.setItem('ms_username',this.ruleForm.username);
+                                    // 登录状态一天过期，后台返回的“登录时间+一天”的时间戳保存到localstorage
+                                    localStorage.setItem('timeout',res[key]);
+                                    this.$router.push('/');
+                                } else if (key == 1) {
+                                    this.$message.error(res[key]);
+                                    getVerifyImg().then(res => {
+                                        this.imgSrc = res;
+                                    })
+                                } else if (key == 2) {
+                                    this.$message.error(res[key])
+                                    // 验证码错误的时候刷新验证码
+                                    getVerifyImg().then(res => {
+                                        this.imgSrc = res;
+                                    })
+                                }
+                            }
+                        })
                     } else {
                         console.log('error submit!!');
                         return false;
