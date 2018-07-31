@@ -41,7 +41,7 @@
 </template>
 
 <script>
-    import { addNews, getNewsDetail, deleteNews, deleteNewsList , updateNews, 
+    import { uploadImg, addNews, getNewsDetail, deleteNews, deleteNewsList , updateNews, 
     addNotice, getNoticeDetail, deleteNotice, deleteNoticeList , updateNotice } from '../../api.js'
     import { mavonEditor } from 'mavon-editor'
     import 'mavon-editor/dist/css/index.css'
@@ -99,12 +99,10 @@
             $imgAdd(pos, $file){
                 var formdata = new FormData();
                 formdata.append('file', $file);
-                // 这里没有服务器供大家尝试，可将下面上传接口替换为你自己的服务器接口
-                this.$axios({
-                    url: '/common/upload',
-                    method: 'post',
-                    data: formdata,
-                    headers: { 'Content-Type': 'multipart/form-data' },
+                uploadImg(formdata, {
+                    header: {
+                        'Content-Type': 'multipart/form-data'
+                    }
                 }).then((url) => {
                     this.$refs.md.$img2Url(pos, url);
                 })
@@ -157,25 +155,41 @@
                         markdown: this.content
                     }
                     addNews(params1).then(res => {
-                        this.$message.success(res)
+                        if (res == '发布成功') {
+                            this.$message.success(res);
+                            this.$router.push({
+                                path: '/news'
+                            })
+                        } else {
+                            this.$message.error(res);
+                        }
                     }).catch(err => {
                         this.$message.error(res)
                     })
                 } else if (type == 'editNews') {  // 编辑新闻
                     let img;
+                    let nid = this.$route.params.nid;
                     if (this.dialogImageUrl == '') { // 判断有没有修改封面，没有修改传原来的URL
                         img = this.originalImgUrl;
                     } else {
                         img = this.dialogImageUrl;
                     }
                     let params2 = {
+                        nid: nid,
                         newsTitle: this.title,
                         editor: this.editor,
                         img: img,
                         markdown: this.content
                     }
                     updateNews(params2).then(res => {
-                        this.$message.success(res)
+                       if (res == '修改成功') {
+                            this.$message.success(res);
+                        } else {
+                            this.$message.error(res);
+                            this.$router.push({
+                                path: '/news'
+                            })
+                        } 
                     }).catch(err => {
                         this.$message.error(res)
                     })
@@ -187,25 +201,41 @@
                         markdown: this.content
                     }
                     addNotice(params3).then(res => {
-                        this.$message.success(res)
+                        if (res == '发布成功') {
+                            this.$message.success(res);
+                            this.$router.push({
+                                path: '/notice'
+                            })
+                        } else {
+                            this.$message.error(res);
+                        }
                     }).catch(err => {
                         this.$message.error(res)
                     })
                 } else if (type == 'editNotice') {  // 编辑公告
                     let img;
+                    let aid = this.$route.params.aid;
                     if (this.dialogImageUrl == '') {
                         img = this.originalImgUrl;
                     } else {
                         img = this.dialogImageUrl;
                     }
                     let params4 = {
+                        aid: aid,
                         announceTitle: this.title,
                         editor: this.editor,
                         img: img,
                         markdown: this.content
                     }
                     updateNotice(params4).then(res => {
-                        this.$message.success(res)
+                        if (res == '修改成功') {
+                            this.$message.success(res);
+                            this.$router.push({
+                                path: '/notice'
+                            })
+                        } else {
+                            this.$message.error(res);
+                        } 
                     }).catch(err => {
                         this.$message.error(res)
                     })

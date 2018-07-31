@@ -11,9 +11,11 @@
                     标题：<input type="text" v-model="title" placeholder="请输入标题">
                 </p>
             </div>
-            <div>
+            <div v-if="original" class="original-box">
                 <span>原图：</span>
-                <img :src="imgUrl" alt="">
+                <div class="original-img">
+                    <img :src="originalImgUrl" alt="原图">
+                </div>
             </div>
             <el-upload
                 :action="url"
@@ -35,22 +37,21 @@
 </template>
 
 <script>
-    import { addCase, getCaseDetail, updateCase } from '../../api.js'
+    import { addCase, getCaseDetail, updateCase, uploadImg } from '../../api.js'
     import { mavonEditor } from 'mavon-editor'
     import 'mavon-editor/dist/css/index.css'
     export default {
         name: 'markdown',
         data() {
             return {
-                cid: '',  // case的cid
-                imgUrl: '',
+                original: false,
+                originalImgUrl: '',
                 url: '/'+ 'upload',
                 title: '',   // 标题
                 content:'', // markdown语法文本
-                //上传图片的URL和显示
+                html:'<h1>make</h1>',  // markdown转化的html
                 dialogImageUrl: '',  // 上传图片的URL
                 dialogVisible: false,
-                html:'<h1>make</h1>',
                 fileList: []
             }
         },
@@ -93,61 +94,85 @@
             $imgAdd(pos, $file){
                 var formdata = new FormData();
                 formdata.append('file', $file);
-                // 服务器接口
-                this.$axios({
-                    url: 'http://123.207.13.37:8080/upload',
-                    method: 'post',
-                    data: formdata,
-                    headers: { 'Content-Type': 'multipart/form-data' },
+                uploadImg(formdata, {
+                    header: {
+                        'Content-Type': 'multipart/form-data'
+                    }
                 }).then((url) => {
                     this.$refs.md.$img2Url(pos, url);
                 })
+                // 服务器接口
+                // this.$axios({
+                //     url: 'http://123.207.13.37:8080/upload',
+                //     method: 'post',
+                //     data: formdata,
+                //     headers: { 'Content-Type': 'multipart/form-data' },
+                // }).then((url) => {
+                //     this.$refs.md.$img2Url(pos, url);
+                // })
             },
             change(value, render){
                 // render 为 markdown 解析后的结果
                 this.html = render;
             },
             getEdit() {
-                let typeSelect = this.$route.query.type;
-                this.cid = this.$route.query.cid;
-                if (typeSelect == 'edit') {  // 判断是编辑还是新增
-                    getCaseDetail(this.cid).then(res => {
+                let typeSelect = this.$route.params.type;
+                if (typeSelect == 'editCase') {  // 判断是编辑还是新增
+                    this.original = true;  // 编辑时显示原图
+                    let cid = this.$route.params.cid;
+                    getCaseDetail(cid).then(res => {
                         this.title = res.caseName;
-                        this.imgUrl = res.img;
+                        this.originalImgUrl = res.img;
                         this.content = res.markdown;
                     })
+                } else {
+                    this.original = false;  // 新增时不显示原图
                 }
             },
             submit(){
-                let typeSelect = this.$route.query.type;
-                if (typeSelect == 'edit') {  // 判断是编辑还是新增
+                let type = this.$route.params.type;
+                if (type == 'editCase') {  // 判断是编辑还是新增
                     let img;
+                    let cid = this.$route.params.cid
                     if (this.dialogImageUrl=='') {
-                        img = this.imgUrl;
+                        img = this.originalImgUrl;
                     } else {
                         img = this.dialogImageUrl;
                     }
-                    let params2 = { // 修改传参
-                        cid: this.cid,
+                    let params1 = { // 修改传参
+                        cid: cid,
                         caseName: this.title,
                         img: img,
                         markdown: this.content
                     }
-                    updateCase(params2).then(res => {
-                        this.$message.success(res);
+                    updateCase(params1).then(res => {
+                        if (res == '修改成功') {
+                            this.$message.success(res);
+                            this.$router.push({
+                                path: '/showcase'
+                            })
+                        } else {
+                            this.$message.error(res);
+                        }
                     }).catch(err => {
                         this.$message.error(err);
                     })
                 }
-                else if (typeSelect == 'add') {
-                    
-                    let params1 = { // 添加传参
+                else if (type == 'addCase') {
+                    let params2 = { // 添加传参
                         caseName: this.title,
                         img: this.dialogImageUrl,
                         markdown: this.content
                     }
-                    addCase(params1).then(res => {
-                    this.$message.success(res);
+                    addCase(params2).then(res => {
+                        if (res == '发布成功') {
+                            this.$message.success(res);
+                            this.$router.push({
+                                path: '/showcase'
+                            })
+                        } else {
+                            this.$message.error(res);
+                        }
                     }).catch(err => {
                         this.$message.error(err);
                     })
@@ -160,18 +185,29 @@
     }
 </script>
 <style scoped>
+    .original-box {
+        width: 300px;
+    }
+    .original-img {
+        margin-top: 8px;
+        position: relative;
+        padding-bottom: 63.571419%;
+        width: 100%;
+    }
+    .original-img > img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
     .back {
         cursor: pointer;
     }
     .editor-btn {
         margin-top: 20px;
     }
-    /* .plugins-tips {
-        text-align: center;
-    }*/
     .pic {
-        /* display: flex;
-        justify-content: center; */
         margin-top: 10px;
     } 
     .editor {

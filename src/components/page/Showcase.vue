@@ -57,7 +57,9 @@
                 <el-row>
                     <el-col :span="6" v-for="(item, index) in items.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
                         <el-card :body-style="{ padding: '0px' }">
-                            <img :src="item.img" class="image">
+                            <div class="img-box">
+                                <img :src="item.img" class="image">
+                            </div>
                             <div style="padding: 14px;">
                                 <div class="bottom clearfix">
                                     <span>{{ item.caseName }}</span>
@@ -106,14 +108,14 @@
                 pagesize: 12,
                 total: 0,
                 items: [
-                    {
-                        img: "../../../static/img/img.jpg",
-                        caseName: "案例一"
-                    },
-                    {
-                        img: "../../../static/img/img.jpg",
-                        caseName: "案例二"
-                    }
+                    // {
+                    //     img: "../../../static/img/img.jpg",
+                    //     caseName: "案例一"
+                    // },
+                    // {
+                    //     img: "../../../static/img/img.jpg",
+                    //     caseName: "案例二"
+                    // }
                 ]
             }
         },
@@ -134,17 +136,17 @@
             //点击案例按钮跳转markdown
             addCase() {
                 this.$router.push({
-                    path: '/casemarkdown',
-                    query: {
-                        type: 'add'
+                    name: 'casemarkdown',
+                    params: {
+                        type: 'addCase'
                     }
                 })
             },
             handleEdit(item,index) {
                 this.$router.push({
-                    path: '/casemarkdown',
-                    query: {
-                        type: 'edit',
+                    name: 'casemarkdown',
+                    params: {
+                        type: 'editCase',
                         cid: item.cid
                     }
                 })
@@ -187,28 +189,35 @@
         font-size: 13px;
         color: #999;
     }
-
     .bottom {
         margin-top: 13px;
         line-height: 12px;
     }
-
     .button {
         padding: 0;
         float: right;
     }
-
+    .img-box {
+        position: relative;
+        width: 100%;
+        padding-bottom: 63.571429%;
+    }
+    .img-box > img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
     .image {
         width: 100%;
         display: block;
     }
-
     .clearfix:before,
     .clearfix:after {
         display: table;
         content: "";
     }
-
     .clearfix:after {
         clear: both
     }

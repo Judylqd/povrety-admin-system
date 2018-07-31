@@ -13,6 +13,8 @@ export const logout = () => { return axios.post(`${base}` + 'doLogout').then(res
 
 export const getVerifyImg = () => { return axios.get(`${base}` + 'valicode').then(res => res.data) };
 
+// 上传图片
+export const uploadImg = (params) => { return axios.post(`${base}` + 'upload', params).then(res => res.data) };
 // case
 export const getCaseList = () => { return axios.get(`${base}` + 'cases/list').then(res => res.data) };
 
@@ -22,7 +24,7 @@ export const deleteCase = (params) => { return axios.delete(`${base}` + 'cases/d
 
 export const getCaseDetail = (params) => { return axios.get(`${base}` + 'cases/detail/' + params).then(res => res.data) };
 
-export const updateCase = (params) => { return axios.put(`${base}` + 'cases/update/', params).then(res => res.data) };
+export const updateCase = (params) => { return axios.put(`${base}` + 'cases/update', params).then(res => res.data) };
 
 // news
 export const getNewsList = () => { return axios.get(`${base}` + 'news/list').then(res => res.data) };
@@ -35,7 +37,7 @@ export const deleteNewsList = (params) => { return axios.delete(`${base}` + 'new
 
 export const getNewsDetail = (params) => { return axios.get(`${base}` + 'news/detail/' + params).then(res => res.data) };
 
-export const updateNews = (params) => { return axios.put(`${base}` + 'news/update/', params).then(res => res.data) };
+export const updateNews = (params) => { return axios.put(`${base}` + 'news/update', params).then(res => res.data) };
 
 // notice
 export const getNoticeList = () => { return axios.get(`${base}` + 'announce/list').then(res => res.data) };
@@ -48,4 +50,4 @@ export const deleteNoticeList = (params) => { return axios.delete(`${base}` + 'a
 
 export const getNoticeDetail = (params) => { return axios.get(`${base}` + 'announce/detail/' + params).then(res => res.data) };
 
-export const updateNotice = (params) => { return axios.put(`${base}` + 'announce/update/', params).then(res => res.data) };
+export const updateNotice = (params) => { return axios.put(`${base}` + 'announce/update', params).then(res => res.data) };
