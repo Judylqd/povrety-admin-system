@@ -55,7 +55,7 @@
             <el-button type="primary" icon="add" @click="addCase" >添加案例</el-button>
             <div class="show-box">
                 <el-row>
-                    <el-col :span="6" v-for="(item, index) in items.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
+                    <el-col :span="6" v-for="(item, index) in items" :key="index">
                         <el-card :body-style="{ padding: '0px' }">
                             <div class="img-box">
                                 <img :src="item.img" class="image">
@@ -75,9 +75,8 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
-                    :page-sizes="[12, 24, 36]"
                     :page-size="pagesize"
-                    layout="total, sizes, prev, pager, next, jumper"
+                    layout="total, prev, pager, next, jumper"
                     :total="total">
                     </el-pagination>
                 </div>
@@ -121,17 +120,19 @@
         },
         methods: {
             getArticle() {
-                getCaseList().then(res => {
+                let params = this.currentPage;
+                getCaseList(params).then(res => {
                     // 返回值数组
-                    this.items = res;
+                    this.items = res.list;
+                    this.total = res.total;
                 })
             },
             handleSizeChange(pagesize) {
                 console.log(`每页 ${pagesize} 条`);
             },
             handleCurrentChange(currentPage) {
-                console.log(`当前 ${currentPage} 页`);
                 this.currentPage = currentPage;
+                this.getArticle();
             },
             //点击案例按钮跳转markdown
             addCase() {
@@ -173,9 +174,9 @@
             this.getArticle();
         },
         watch: {
-            items: function(val) {
-                this.total = val.length;  // 实时更新分页总条数
-            }
+            // items: function(val) {
+            //     this.total = val.length;  // 实时更新分页总条数
+            // }
         }
     }
 

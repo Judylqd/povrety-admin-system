@@ -16,7 +16,7 @@ export const getVerifyImg = () => { return axios.get(`${base}` + 'valicode').the
 // 上传图片
 export const uploadImg = (params) => { return axios.post(`${base}` + 'upload', params).then(res => res.data) };
 // case
-export const getCaseList = () => { return axios.get(`${base}` + 'cases/list').then(res => res.data) };
+export const getCaseList = (params) => { return axios.get(`${base}` + 'cases/list/' + params).then(res => res.data) };
 
 export const addCase = (params) => { return axios.post(`${base}` + 'cases/add', params).then(res => res.data) };
 
@@ -27,7 +27,7 @@ export const getCaseDetail = (params) => { return axios.get(`${base}` + 'cases/d
 export const updateCase = (params) => { return axios.put(`${base}` + 'cases/update', params).then(res => res.data) };
 
 // news
-export const getNewsList = () => { return axios.get(`${base}` + 'news/list').then(res => res.data) };
+export const getNewsList = (params) => { return axios.get(`${base}` + 'news/list/' + params).then(res => res.data) };
 
 export const addNews = (params) => { return axios.post(`${base}` + 'news/add', params).then(res => res.data) };
 // 删除一个
@@ -40,7 +40,7 @@ export const getNewsDetail = (params) => { return axios.get(`${base}` + 'news/de
 export const updateNews = (params) => { return axios.put(`${base}` + 'news/update', params).then(res => res.data) };
 
 // notice
-export const getNoticeList = () => { return axios.get(`${base}` + 'announce/list').then(res => res.data) };
+export const getNoticeList = (params) => { return axios.get(`${base}` + 'announce/list/'+ params).then(res => res.data) };
 
 export const addNotice = (params) => { return axios.post(`${base}` + 'announce/add', params).then(res => res.data) };
 // 删除一个

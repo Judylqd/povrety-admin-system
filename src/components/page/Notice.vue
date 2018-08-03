@@ -40,7 +40,7 @@
                 </el-table> -->
                 <el-table
                     ref="multipleTable"
-                    :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+                    :data="tableData"
                     @selection-change="handleSelectionChange"
                     tooltip-effect="dark"
                     style="width: 100%">
@@ -80,12 +80,10 @@
                 </el-table>
                 <div class="block">
                     <el-pagination
-                    @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
-                    :page-sizes="[10, 20, 30]"
                     :page-size="pagesize"
-                    layout="total, sizes, prev, pager, next, jumper"
+                    layout="total, prev, pager, next, jumper"
                     :total="total">
                     </el-pagination>
                 </div> 
@@ -131,11 +129,13 @@
         methods: {
             // 获取数据列表
             getArticle() {
-                getNoticeList().then(res => {
-                    for (let i in res) {
-                        res[i].time = this.changeTime(res[i].time)
+                let params = this.currentPage;
+                getNoticeList(params).then(res => {
+                    for (let i in res.list) {
+                        res.list[i].time = this.changeTime(res.list[i].time)
                     }
-                    this.tableData = res;
+                    this.tableData = res.list;
+                    this.total = res.total
                 })
             },
             toggleSelection(rows) {
@@ -197,12 +197,9 @@
                     this.getArticle()
                 })
             },
-            handleSizeChange(pagesize) {
-                console.log(`每页 ${pagesize} 条`);
-            },
             handleCurrentChange(currentPage) {
-                console.log(`当前 ${currentPage} 页`);
                 this.currentPage = currentPage;
+                this.getArticle(); // 当前页变化请求当页数据
             },
             // 时间戳转化为2018/7/30的格式
             changeTime(timestamp) {
@@ -217,9 +214,9 @@
             this.getArticle();
         },
         watch: {
-            tableData: function(val) {
-                this.total = val.length;
-            }
+            // tableData: function(val) {
+            //     this.total = val.length;
+            // }
         }
     }
 </script>
