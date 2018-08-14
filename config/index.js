@@ -14,7 +14,8 @@ module.exports = {
       // webpack跨域解决
       '/': {
         // gateway apis
-        target: 'http://123.207.13.37:8080/', // 接口域名
+        // target: 'http://123.207.13.37:8080/', // 接口域名
+        target: 'http://www.un-net.com/', // 接口域名
         changeOrigin: true, //是否跨域
         secure: false,
         pathRewrite: {
@@ -49,12 +50,12 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, '../dist/manage/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot: path.resolve(__dirname, '../dist/manage'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/manage/',
 
     /**
      * Source Maps

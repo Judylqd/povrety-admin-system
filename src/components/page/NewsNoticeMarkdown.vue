@@ -1,9 +1,10 @@
 <template>
     <div>
         <div class="crumbs">
-            <el-breadcrumb separator="/">
+            <el-breadcrumb separator="">
                 <el-breadcrumb-item><i class="el-icon-news"></i>markdown</el-breadcrumb-item>
                 <!-- <el-breadcrumb-item>新建新闻</el-breadcrumb-item> -->
+                <span id="back" @click="backForward"><i class="el-icon-back"></i>返回</span>
             </el-breadcrumb>
         </div>
         <div class="container">
@@ -65,6 +66,18 @@
             mavonEditor
         },
         methods: {
+            backForward() {
+                let type = this.$route.params.type;
+                if (type == 'editNews' || type == 'addNews') {
+                    this.$router.push({
+                        name: 'news'
+                    })
+                } else if (type == 'editNotice' || type == 'addNotice') {
+                    this.$router.push({
+                        name: 'notice'
+                    })
+                }
+            },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';
                 const isPNG = file.type === 'image/png';
@@ -262,6 +275,11 @@
     }
 </script>
 <style scoped>
+    #back {
+        float: right;
+        cursor: pointer;
+        color: #606266;
+    }
     .original-box {
         width: 300px;
     }

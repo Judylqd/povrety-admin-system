@@ -32,9 +32,9 @@
             return {
                 imgSrc: '',
                 ruleForm: {
-                    username: 'root',
-                    password: '12345678',
-                    vali: '123'
+                    username: '',
+                    password: '',
+                    vali: ''
                 },
                 rules: {
                     username: [
