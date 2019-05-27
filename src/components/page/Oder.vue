@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-document"></i>公告</el-breadcrumb-item>
+                <el-breadcrumb-item>订单管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
@@ -10,34 +10,8 @@
                 <div style="margin-top: 20px">
                     <el-button type="primary" @click="delAll()">批量删除</el-button>
                     <el-button @click="toggleSelection()">取消选择</el-button>
-                    <el-button type="primary" @click="addNotice">添加公告</el-button>
+                    <el-button type="primary" @click="addNews">添加订单</el-button>
                 </div>
-                <!-- <el-table
-                    ref="multipleTable"
-                    :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
-                    tooltip-effect="dark"
-                    style="width: 100%">
-                    <el-table-column
-                    type="selection"
-                    width="30">
-                    </el-table-column>
-                    <el-table-column
-                    label="全选"
-                    prop="img"
-                    width="120">
-                        <template slot-scope="scope">
-                            <img :src="scope.row.img" class="news-img">
-                        </template>
-                    </el-table-column>
-                    <el-table-column>
-                        <template slot-scope="scope">
-                            <h4>{{ scope.row.announceTitle }}</h4>
-                            <p>{{ scope.row.content }}</p>
-                            <i class="el-icon-edit" @click="handleEdit(scope.$index,scope.row)"></i>
-                            <i class="el-icon-delete" @click="handleDelete(scope.$index,scope.row)"></i>
-                        </template>
-                    </el-table-column>
-                </el-table> -->
                 <el-table
                     ref="multipleTable"
                     :data="tableData"
@@ -49,24 +23,44 @@
                     width="30">
                     </el-table-column>
                     <el-table-column
-                    label="缩略图"
+                    label="订单ID"
+                    prop="newsTitle"
+                    width="130">
+                    </el-table-column>
+                    <el-table-column
+                    label="用户名"
+                    prop="newsTitle"
+                    width="130">
+                    </el-table-column>
+                    <el-table-column
+                    label="图片"
                     prop="img"
                     width="180">
                         <template slot-scope="scope">
-                            <div class="notice-img">
+                            <div class="news-img">
                                 <img :src="scope.row.img">
                             </div>
                         </template>
                     </el-table-column>
                     <el-table-column
-                    label="公告标题"
-                    prop="announceTitle"
-                    width="180">
+                    label="特产名称"
+                    prop="newsTitle"
+                    width="220">
                     </el-table-column>
                     <el-table-column
-                    label="更新时间"
+                    label="价格"
+                    prop="newsTitle"
+                    width="100">
+                    </el-table-column>
+                    <el-table-column
+                    label="数量"
+                    prop="newsTitle"
+                    width="100">
+                    </el-table-column>
+                    <el-table-column
+                    label="下单时间"
                     prop="time"
-                    width="180">
+                    width="130">
                     </el-table-column>
                     <el-table-column
                     label="操作"
@@ -101,41 +95,82 @@
 </template>
 
 <script>
-    import { getNoticeList, deleteNotice, deleteNoticeList } from '../../api.js'
+    import { getNewsList, deleteNews, deleteNewsList } from '../../api.js'
     export default {
-        name: 'news',
+        name: 'oder',
         data () {
             return {
                 idx: -1,
                 del_case: {},
-                multipleSelection: [],
                 delVisible: false,
                 pagesize: 10,
                 currentPage: 1,
                 total: 0,
                 tableData: [
                     // {
-                    //     announceTitle: '公告一',
+                    //     newsTitle: '新闻一',
                     //     time: '2018/7/26',
                     //     img: '../../../static/img/img.jpg'
                     // }, {
-                    //     announceTitle: '公告二',
+                    //     newsTitle: '新闻二',
                     //     time: '2018/7/26',
-                    //     img: '../../../static/img/img.jpg'
+                    //     img: '../../../static/img/img.jpg' 
+                    // }, {
+                    //     newsTitle: '新闻三',
+                    //     time: '2018/7/26',
+                    //     img: '',
+                    //     content: ''
+                    // }, {
+                    //     newsTitle: '新闻四',
+                    //     time: '2018/7/26',
+                    //     img: ''
+                    // }, {
+                    //     newsTitle: '新闻五',
+                    //     time: '2018/7/26',
+                    //     img: ''
+                    // }, {
+                    //     newsTitle: '新闻六',
+                    //     time: '2018/7/26',
+                    //     img: ''
+                    // }, {
+                    //     newsTitle: '新闻七',
+                    //     time: '2018/7/26',
+                    //     img: ''
+                    // }, {
+                    //     newsTitle: '新闻八',
+                    //     time: '2018/7/26',
+                    //     img: ''
+                    // }, {
+                    //     newsTitle: '新闻九',
+                    //     time: '2018/7/26',
+                    //     img: ''
+                    // }, {
+                    //     newsTitle: '新闻十',
+                    //     time: '2018/7/26',
+                    //     img: ''
+                    // }, {
+                    //     newsTitle: '新闻十一',
+                    //     time: '2018/7/26',
+                    //     img: ''
+                    // }, {
+                    //     newsTitle: '新闻十二',
+                    //     time: '2018/7/26',
+                    //     img: ''
                     // }
-                ]
+                ],
+                multipleSelection: []
             }
         },
         methods: {
-            // 获取数据列表
+            // 获取新闻列表
             getArticle() {
                 let params = this.currentPage;
-                getNoticeList(params).then(res => {
+                getNewsList(params).then(res => {
                     for (let i in res.list) {
                         res.list[i].time = this.changeTime(res.list[i].time)
                     }
                     this.tableData = res.list;
-                    this.total = res.total
+                    this.total = res.total;
                 })
             },
             toggleSelection(rows) {
@@ -150,12 +185,13 @@
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val; // 选中的行
+                console.log(this.multipleSelection)
             },
-            addNotice() {
+            addNews() {
                 this.$router.push({
                     name: 'newsnoticemarkdown',
                     params: {
-                        type: 'addNotice'
+                        type: 'addNews'
                     }
                 })
             },
@@ -163,20 +199,20 @@
                 this.$router.push({
                     name: 'newsnoticemarkdown',
                     params: {
-                        type: 'editNotice',
-                        aid: row.aid
+                        type: 'editNews',
+                        nid: row.nid
                     }
                 })
             },
             delAll() {
-                // 批量删除
+                // 点击删除全部时
                 let requestList = [];
                 this.multipleSelection.forEach(selectedItem => {
                     // 删除请求
-                    let multiple = selectedItem.aid;
+                    let multiple = selectedItem.nid;
                     requestList.push( multiple );
                 })
-                deleteNoticeList(requestList).then(res => {
+                deleteNewsList(requestList).then(res => {
                     this.$message.success(res);
                     this.getArticle();
                 })
@@ -189,8 +225,8 @@
             },
             // 确认删除
             deleteRow(){
-                let params = this.del_case.aid;  // 要确定cid的数据类型
-                deleteNotice(params).then(res => {
+                let params = this.del_case.nid;  // 要确定cid的数据类型
+                deleteNews(params).then(res => {
                     // 返回值是字符串
                     this.$message.success(res);
                     this.delVisible = false;
@@ -199,7 +235,7 @@
             },
             handleCurrentChange(currentPage) {
                 this.currentPage = currentPage;
-                this.getArticle(); // 当前页变化请求当页数据
+                this.getArticle();
             },
             // 时间戳转化为2018/7/30的格式
             changeTime(timestamp) {
@@ -208,7 +244,7 @@
                 let month = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1);
                 let day = date.getDate();
                 return year + '-' + month + '-'+day
-            }
+            }    
         },
         mounted() {
             this.getArticle();
@@ -222,12 +258,12 @@
 </script>
 
 <style scoped>
-    .notice-img {
+    .news-img {
         position: relative;
         padding-bottom: 50%;
         width: 100%;
     }
-    .notice-img > img {
+    .news-img > img {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -235,15 +271,12 @@
         left: 0;
         border-radius: 5px;
     }
-    /* .el-icon-delete {
-        margin-left: 10px;
-    }
     .el-icon-delete, .el-icon-edit {
+        margin-left: 10px;
         color: #409EFF;
         cursor: pointer;
-    } */
-    .el-table--mini, .el-table--small, .el-table__expand-icon {
-        font-size: 14px;
     }
+    .el-table--mini, .el-table--small, .el-table__expand-icon {
+    font-size: 14px;
+}
 </style>
-

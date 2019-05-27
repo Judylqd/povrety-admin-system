@@ -5,7 +5,7 @@ let base = '/';
 
 
 // 登录相关接口
-export const login = (params) => { return axios.post(`${base}` + 'doLogin',params).then(res => res.data) };
+export const login = (params) => { return axios.post(`${base}` + '/sys/login',params).then(res => res.data) };
 
 export const islogin = () => { return axios.post(`${base}` + 'isLogin').then(res => res.data) };
 

@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-tickets"></i>案例展示</el-breadcrumb-item>
+                <el-breadcrumb-item>用户管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">

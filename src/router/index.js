@@ -7,36 +7,41 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/showcase'  // 重定向
+      redirect: '/user'  // 重定向
     },
     {
       path: '/',
       component: resolve => require(['../components/common/Home.vue'],resolve),
       children:[
         {
-          path: '/showcase',
-          name: 'showcase',
-          component: resolve => require(['../components/page/Showcase.vue'],resolve)
+          path: '/user',
+          name: 'user',
+          component: resolve => require(['../components/page/User.vue'],resolve)
         },
         {
-          path: '/news',
-          name: 'news',
-          component: resolve => require(['../components/page/News.vue'],resolve)
+          path: '/oder',
+          name: 'oder',
+          component: resolve => require(['../components/page/Oder.vue'],resolve)
         },
         {
-          path: '/notice',
-          name: 'notice',
-          component: resolve => require(['../components/page/Notice.vue'],resolve)
+          path: '/shoppingcart',
+          name: 'shoppingcart',
+          component: resolve => require(['../components/page/Shoppingcart.vue'], resolve)
         },
         {
-          path: '/casemarkdown',
-          name: 'casemarkdown',
-          component: resolve => require(['../components/page/CaseMarkdown.vue'], resolve)
+          path: '/goods',
+          name: 'goods',
+          component: resolve => require(['../components/page/Goods.vue'], resolve)
         },
         {
-          path: '/newsnoticemarkdown',
-          name: 'newsnoticemarkdown',
-          component: resolve => require(['../components/page/NewsNoticeMarkdown.vue'], resolve)
+          path: '/investor',
+          name: 'investor',
+          component: resolve => require(['../components/page/Investor.vue'], resolve)
+        },
+        {
+          path: '/apply',
+          name: 'apply',
+          component: resolve => require(['../components/page/Apply.vue'], resolve)
         }
       ]
     },

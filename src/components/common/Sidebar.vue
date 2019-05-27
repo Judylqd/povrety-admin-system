@@ -20,19 +20,34 @@
                 items: [
                     {
                         icon: 'el-icon-tickets',
-                        index: 'showcase',
-                        title: '案例展示'
+                        index: 'user',
+                        title: '用户管理'
                     },
                     {
                         icon: 'el-icon-news',
-                        index: 'news',
-                        title: '公司新闻'
+                        index: 'oder',
+                        title: '订单管理'
                     },
                     {
                         icon: 'el-icon-document',
-                        index: 'notice',
-                        title: '公告'
-                    }
+                        index: 'shoppingcart',
+                        title: '购物车管理'
+                    },
+                    {
+                        icon: 'el-icon-news',
+                        index: 'goods',
+                        title: '商品管理'
+                    },
+                    {
+                        icon: 'el-icon-document',
+                        index: 'investor',
+                        title: '投资者管理'
+                    },
+                    {
+                        icon: 'el-icon-news',
+                        index: 'apply',
+                        title: '供应商管理'
+                    },
                 ]
             }
         },

@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-news"></i>公司新闻</el-breadcrumb-item>
+                <el-breadcrumb-item>商品管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
@@ -10,7 +10,7 @@
                 <div style="margin-top: 20px">
                     <el-button type="primary" @click="delAll()">批量删除</el-button>
                     <el-button @click="toggleSelection()">取消选择</el-button>
-                    <el-button type="primary" @click="addNews">添加新闻</el-button>
+                    <el-button type="primary" @click="addNews">添加商品</el-button>
                 </div>
                 <el-table
                     ref="multipleTable"
@@ -23,7 +23,12 @@
                     width="30">
                     </el-table-column>
                     <el-table-column
-                    label="缩略图"
+                    label="商品ID"
+                    prop="newsTitle"
+                    width="130">
+                    </el-table-column>
+                    <el-table-column
+                    label="图片"
                     prop="img"
                     width="180">
                         <template slot-scope="scope">
@@ -32,24 +37,20 @@
                             </div>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column>
-                        <template slot-scope="scope">
-                            <h4>{{ scope.row.newsTitle }}</h4>
-                            <p>{{ scope.row.content }}</p>
-                            <span>{{ scope.row.time }}</span>
-                            <i class="el-icon-edit" @click="handleEdit(scope.$index,scope.row)"></i>
-                            <i class="el-icon-delete" @click="handleDelete(scope.$index,scope.row)"></i>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column
-                    label="新闻标题"
+                    label="商品名称"
                     prop="newsTitle"
-                    width="180">
+                    width="220">
                     </el-table-column>
                     <el-table-column
-                    label="更新时间"
-                    prop="time"
-                    width="180">
+                    label="价格"
+                    prop="newsTitle"
+                    width="100">
+                    </el-table-column>
+                    <el-table-column
+                    label="库存"
+                    prop="newsTitle"
+                    width="100">
                     </el-table-column>
                     <el-table-column
                     label="操作"
@@ -86,7 +87,7 @@
 <script>
     import { getNewsList, deleteNews, deleteNewsList } from '../../api.js'
     export default {
-        name: 'news',
+        name: 'goods',
         data () {
             return {
                 idx: -1,
