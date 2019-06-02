@@ -11,17 +11,17 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // webpack跨域解决
-      '/': {
-        // gateway apis
-        // target: 'http://123.207.13.37:8080/', // 接口域名
-        target: 'http://www.un-net.com/', // 接口域名
-        changeOrigin: true, //是否跨域
-        secure: false,
-        pathRewrite: {
-            '^/': '' //需要rewrite重写的,
-        }
-      }
+      // // webpack跨域解决
+      // '/': {
+      //   // gateway apis
+      //   // target: 'http://123.207.13.37:8080/', // 接口域名
+      //   target: 'http://www.un-net.com/', // 接口域名
+      //   changeOrigin: true, //是否跨域
+      //   secure: false,
+      //   pathRewrite: {
+      //       '^/': '' //需要rewrite重写的,
+      //   }
+      // }
     },
 
     // Various Dev Server settings

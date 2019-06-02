@@ -25,13 +25,8 @@
                     },
                     {
                         icon: 'el-icon-news',
-                        index: 'oder',
+                        index: 'order',
                         title: '订单管理'
-                    },
-                    {
-                        icon: 'el-icon-document',
-                        index: 'shoppingcart',
-                        title: '购物车管理'
                     },
                     {
                         icon: 'el-icon-news',

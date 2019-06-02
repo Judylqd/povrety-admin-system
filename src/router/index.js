@@ -19,14 +19,9 @@ export default new Router({
           component: resolve => require(['../components/page/User.vue'],resolve)
         },
         {
-          path: '/oder',
-          name: 'oder',
-          component: resolve => require(['../components/page/Oder.vue'],resolve)
-        },
-        {
-          path: '/shoppingcart',
-          name: 'shoppingcart',
-          component: resolve => require(['../components/page/Shoppingcart.vue'], resolve)
+          path: '/order',
+          name: 'order',
+          component: resolve => require(['../components/page/Order.vue'],resolve)
         },
         {
           path: '/goods',

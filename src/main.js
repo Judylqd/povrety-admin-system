@@ -11,6 +11,7 @@ Vue.config.productionTip = false;
 Vue.use(ElementUI,{size: 'small'});
 Vue.prototype.global = global;
 
+
 // router.beforeEach((to, from, next) => {
 //   const role = localStorage.getItem('ms_username');
 //   const time = localStorage.getItem('timeout');

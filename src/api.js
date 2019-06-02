@@ -1,11 +1,11 @@
 import axios from 'axios'
 
 // let base = 'http://123.207.13.37:8080/';
-let base = '/';
+let base = 'http://localhost:8088/';
 
 
 // 登录相关接口
-export const login = (params) => { return axios.post(`${base}` + '/sys/login',params).then(res => res.data) };
+export const login = (params) => { return axios.post(`${base}` + '/adminLogin',params).then(res => res.data) };
 
 export const islogin = () => { return axios.post(`${base}` + 'isLogin').then(res => res.data) };
 
@@ -13,41 +13,47 @@ export const logout = () => { return axios.post(`${base}` + 'doLogout').then(res
 
 export const getVerifyImg = () => { return axios.get(`${base}` + 'valicode').then(res => res.data) };
 
-// 上传图片
-export const uploadImg = (params) => { return axios.post(`${base}` + 'upload', params).then(res => res.data) };
-// case
-export const getCaseList = (params) => { return axios.get(`${base}` + 'cases/list/' + params).then(res => res.data) };
 
-export const addCase = (params) => { return axios.post(`${base}` + 'cases/add', params).then(res => res.data) };
+// =====================获取订单信息========================
+export const getNewsList = (params) => { return axios.post(`${base}` + 'findOrderLimit', params).then(res => res.data) };
 
-export const deleteCase = (params) => { return axios.delete(`${base}` + 'cases/delete/' + params).then(res => res.data) };
+// 获取商品信息
+export const getGoodsList = (params) => { return axios.post(`${base}` + 'findGoodsLimit', params).then(res => res.data) };
 
-export const getCaseDetail = (params) => { return axios.get(`${base}` + 'cases/detail/' + params).then(res => res.data) };
+// 获取用户信息
+export const getUserList = (params) => { return axios.post(`${base}` + 'findUserLimit', params).then(res => res.data) };
 
-export const updateCase = (params) => { return axios.put(`${base}` + 'cases/update', params).then(res => res.data) };
 
-// news
-export const getNewsList = (params) => { return axios.get(`${base}` + 'news/list/' + params).then(res => res.data) };
+// ======================编辑用户信息===========================
+export const editUserInfo = (params) => { return axios.post(`${base}` + 'editSubmit', params).then(res => res.data) };
 
-export const addNews = (params) => { return axios.post(`${base}` + 'news/add', params).then(res => res.data) };
-// 删除一个
-export const deleteNews = (params) => { return axios.delete(`${base}` + 'news/delete/' + params).then(res => res.data) };
-// 删除多个
-export const deleteNewsList = (params) => { return axios.delete(`${base}` + 'news/delete', { data: params }).then(res => res.data) };
+//添加用户信息
+export const addUserInfo = (params) => { return axios.post(`${base}` + 'editSubmit', params).then(res => res.data) };
 
-export const getNewsDetail = (params) => { return axios.get(`${base}` + 'news/detail/' + params).then(res => res.data) };
+// 删除单个用户信息
+export const deleteUser = (params) => { return axios.post(`${base}` + 'deleteUser', params).then(res => res.data) };
 
-export const updateNews = (params) => { return axios.put(`${base}` + 'news/update', params).then(res => res.data) };
 
-// notice
-export const getNoticeList = (params) => { return axios.get(`${base}` + 'announce/list/'+ params).then(res => res.data) };
+// =======================删除订单================================
+export const deleteOrder = (params) => { return axios.post(`${base}` + 'deleteOrder', params).then(res => res.data) };
 
-export const addNotice = (params) => { return axios.post(`${base}` + 'announce/add', params).then(res => res.data) };
-// 删除一个
-export const deleteNotice = (params) => { return axios.delete(`${base}` + 'announce/delete/' + params).then(res => res.data) };
-// 删除多个
-export const deleteNoticeList = (params) => { return axios.delete(`${base}` + 'announce/delete', { data: params }).then(res => res.data) };
+// 编辑订单信息
+export const editOrderInfo = (params) => { return axios.post(`${base}` + 'updateOrder', params).then(res => res.data) };
 
-export const getNoticeDetail = (params) => { return axios.get(`${base}` + 'announce/detail/' + params).then(res => res.data) };
+// ========================删除商品===============================
+export const deleteGoods = (params) => { return axios.post(`${base}` + 'deleteGoods', params).then(res => res.data) };
 
-export const updateNotice = (params) => { return axios.put(`${base}` + 'announce/update', params).then(res => res.data) };
+// 编辑商品信息
+export const editGoodsInfo = (params) => { return axios.post(`${base}` + 'updateGoods', params).then(res => res.data) };
+
+// 获取供应商信息
+export const getApplayList = (params) => { return axios.post(`${base}` + 'findApplyLimit', params).then(res => res.data) };
+
+// 获取投资者列表
+export const getInvestorList = (params) => { return axios.post(`${base}` + 'findInvestorLimit', params).then(res => res.data) };
+
+// 删除投资者信息
+export const deleteInvestor = (params) => { return axios.post(`${base}` + 'deleteByInvestorId', params).then(res => res.data) };
+
+// 删除供应商信息
+export const deleteApply = (params) => { return axios.post(`${base}` + 'deleteByApplyId', params).then(res => res.data) };

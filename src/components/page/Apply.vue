@@ -8,8 +8,8 @@
         <div class="container">
             <template>
                 <div style="margin-top: 20px">
-                    <el-button type="primary" @click="delAll()">批量删除</el-button>
-                    <el-button @click="toggleSelection()">取消选择</el-button>
+                    <!-- <el-button type="primary" @click="delAll()">批量删除</el-button>
+                    <el-button @click="toggleSelection()">取消选择</el-button> -->
                 </div>
                 <el-table
                     ref="multipleTable"
@@ -17,49 +17,48 @@
                     @selection-change="handleSelectionChange"
                     tooltip-effect="dark"
                     style="width: 100%">
-                    <el-table-column
+                    <!-- <el-table-column
                     type="selection"
                     width="30">
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column
                     label="供应商ID"
-                    prop="newsTitle"
-                    width="130">
+                    prop="id"
+                    width="100">
                     </el-table-column>
                     <el-table-column
                     label="姓名"
-                    prop="newsTitle"
+                    prop="applyName"
                     width="100">
                     </el-table-column>
                     <el-table-column
                     label="邮箱"
-                    prop="newsTitle"
-                    width="150">
+                    prop="applyEmail"
+                    width="180">
                     </el-table-column>
                     <el-table-column
                     label="联系方式"
-                    prop="newsTitle"
+                    prop="applyPhone"
                     width="150">
                     </el-table-column>
                     <el-table-column
                     label="特产种类"
-                    prop="time"
-                    width="130">
+                    prop="applyKind"
+                    >
                     </el-table-column>
                     <el-table-column
                     label="特产名称"
-                    prop="time"
+                    prop="applyGoodsname"
                     width="200">
                     </el-table-column>
                     <el-table-column
                     label="操作"
-                    width="180">
+                    width="80">
                         <template slot-scope="scope">
-                            <el-button size="small" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
+                            <!-- <el-button size="small" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button> -->
                             <el-button size="small" type="danger" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column></el-table-column>
                 </el-table>
                 <div class="block">
                     <el-pagination
@@ -77,14 +76,14 @@
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteRow">确 定</el-button>
+                <el-button type="primary" @click="deleteRow(id)">确 定</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
-    import { getNewsList, deleteNews, deleteNewsList } from '../../api.js'
+    import { getApplayList, deleteApply, deleteNewsList } from '../../api.js'
     export default {
         name: 'apply',
         data () {
@@ -96,70 +95,23 @@
                 currentPage: 1,
                 total: 0,
                 tableData: [
-                    // {
-                    //     newsTitle: '新闻一',
-                    //     time: '2018/7/26',
-                    //     img: '../../../static/img/img.jpg'
-                    // }, {
-                    //     newsTitle: '新闻二',
-                    //     time: '2018/7/26',
-                    //     img: '../../../static/img/img.jpg' 
-                    // }, {
-                    //     newsTitle: '新闻三',
-                    //     time: '2018/7/26',
-                    //     img: '',
-                    //     content: ''
-                    // }, {
-                    //     newsTitle: '新闻四',
-                    //     time: '2018/7/26',
-                    //     img: ''
-                    // }, {
-                    //     newsTitle: '新闻五',
-                    //     time: '2018/7/26',
-                    //     img: ''
-                    // }, {
-                    //     newsTitle: '新闻六',
-                    //     time: '2018/7/26',
-                    //     img: ''
-                    // }, {
-                    //     newsTitle: '新闻七',
-                    //     time: '2018/7/26',
-                    //     img: ''
-                    // }, {
-                    //     newsTitle: '新闻八',
-                    //     time: '2018/7/26',
-                    //     img: ''
-                    // }, {
-                    //     newsTitle: '新闻九',
-                    //     time: '2018/7/26',
-                    //     img: ''
-                    // }, {
-                    //     newsTitle: '新闻十',
-                    //     time: '2018/7/26',
-                    //     img: ''
-                    // }, {
-                    //     newsTitle: '新闻十一',
-                    //     time: '2018/7/26',
-                    //     img: ''
-                    // }, {
-                    //     newsTitle: '新闻十二',
-                    //     time: '2018/7/26',
-                    //     img: ''
-                    // }
                 ],
                 multipleSelection: []
             }
         },
         methods: {
-            // 获取新闻列表
+            // 获取供应商列表
             getArticle() {
-                let params = this.currentPage;
-                getNewsList(params).then(res => {
+                // let params = this.currentPage;
+                let params = {
+                    pageNum: this.currentPage,
+                };
+                getApplayList(params).then(res => {
                     for (let i in res.list) {
                         res.list[i].time = this.changeTime(res.list[i].time)
                     }
-                    this.tableData = res.list;
-                    this.total = res.total;
+                    this.tableData = res.data;
+                    this.total = res.code;
                 })
             },
             toggleSelection(rows) {
@@ -176,15 +128,15 @@
                 this.multipleSelection = val; // 选中的行
                 console.log(this.multipleSelection)
             },
-            handleEdit(index,row) {
-                this.$router.push({
-                    name: 'newsnoticemarkdown',
-                    params: {
-                        type: 'editNews',
-                        nid: row.nid
-                    }
-                })
-            },
+            // handleEdit(index,row) {
+            //     this.$router.push({
+            //         name: 'newsnoticemarkdown',
+            //         params: {
+            //             type: 'editNews',
+            //             nid: row.nid
+            //         }
+            //     })
+            // },
             delAll() {
                 // 点击删除全部时
                 let requestList = [];
@@ -203,13 +155,17 @@
                 this.del_case = row;
                 this.idx = index;
                 this.delVisible = true;
+                this.id = row.id;
             },
             // 确认删除
             deleteRow(){
-                let params = this.del_case.nid;  // 要确定cid的数据类型
-                deleteNews(params).then(res => {
+                // let params = this.del_case.nid;  // 要确定cid的数据类型
+                let params = {
+                    id: this.id
+                };
+                deleteApply(params).then(res => {
                     // 返回值是字符串
-                    this.$message.success(res);
+                    this.$message.success('删除成功');
                     this.delVisible = false;
                     this.getArticle()
                 })

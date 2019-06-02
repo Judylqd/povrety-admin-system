@@ -8,9 +8,9 @@
         <div class="container">
             <template>
                 <div style="margin-top: 20px">
-                    <el-button type="primary" @click="delAll()">批量删除</el-button>
-                    <el-button @click="toggleSelection()">取消选择</el-button>
-                    <el-button type="primary" @click="addNews">添加商品</el-button>
+                    <!-- <el-button type="primary" @click="delAll()">批量删除</el-button>
+                    <el-button @click="toggleSelection()">取消选择</el-button> -->
+                    <!-- <el-button type="primary" @click="addNews">添加商品</el-button> -->
                 </div>
                 <el-table
                     ref="multipleTable"
@@ -18,49 +18,53 @@
                     @selection-change="handleSelectionChange"
                     tooltip-effect="dark"
                     style="width: 100%">
-                    <el-table-column
+                    <!-- <el-table-column
                     type="selection"
                     width="30">
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column
                     label="商品ID"
-                    prop="newsTitle"
-                    width="130">
+                    prop="goodsId"
+                    width="80">
                     </el-table-column>
                     <el-table-column
                     label="图片"
-                    prop="img"
-                    width="180">
+                    prop="image"
+                    width="160">
                         <template slot-scope="scope">
                             <div class="news-img">
-                                <img :src="scope.row.img">
+                                <img :src="scope.row.image">
                             </div>
                         </template>
                     </el-table-column>
                     <el-table-column
                     label="商品名称"
-                    prop="newsTitle"
-                    width="220">
+                    prop="goodsName"
+                    width="200">
+                    </el-table-column>
+                    <el-table-column
+                    label="商品描述"
+                    prop="goodsIntroduce"
+                  >
                     </el-table-column>
                     <el-table-column
                     label="价格"
-                    prop="newsTitle"
-                    width="100">
+                    prop="sellPrice"
+                    width="70">
                     </el-table-column>
                     <el-table-column
                     label="库存"
-                    prop="newsTitle"
-                    width="100">
+                    prop="stock"
+                    width="70">
                     </el-table-column>
                     <el-table-column
                     label="操作"
-                    width="180">
+                    width="150">
                         <template slot-scope="scope">
                             <el-button size="small" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
                             <el-button size="small" type="danger" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column></el-table-column>
                 </el-table>
                 <div class="block">
                     <el-pagination
@@ -73,6 +77,39 @@
                 </div> 
             </template>
         </div>
+        <!-- 编辑弹出框 -->
+        <el-dialog title="编辑" :visible.sync="dialogFormVisible">
+            <el-form :model="form" class="editAlert">
+                <el-form-item label="商品ID" :label-width="formLabelWidth" prop="userId">
+                <el-input v-model="form.goodsId" autocomplete="off" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="图片" :label-width="formLabelWidth" prop="adminName">
+                <el-input v-model="form.image" autocomplete="off" :disabled="true">
+                    <!-- <template slot-scope="scope">
+                        <div class="news-img">
+                            <img :src="scope.row.image">
+                        </div>
+                    </template> -->
+                </el-input>
+                </el-form-item>
+                <el-form-item label="商品名称" :label-width="formLabelWidth" prop="userPhone">
+                <el-input v-model="form.goodsName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="商品描述" :label-width="formLabelWidth" prop="userPhone">
+                <el-input v-model="form.goodsIntroduce" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="价格" :label-width="formLabelWidth" prop="userPhone">
+                <el-input v-model="form.sellPrice" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="库存" :label-width="formLabelWidth" prop="userPhone">
+                <el-input v-model="form.stock" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="assureEdit()">确 定</el-button>
+            </div>
+        </el-dialog>
         <!-- 删除提示框 -->
         <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
@@ -85,7 +122,7 @@
 </template>
 
 <script>
-    import { getNewsList, deleteNews, deleteNewsList } from '../../api.js'
+    import { getGoodsList, deleteGoods, deleteNewsList, editGoodsInfo } from '../../api.js'
     export default {
         name: 'goods',
         data () {
@@ -148,19 +185,36 @@
                     //     img: ''
                     // }
                 ],
-                multipleSelection: []
+                multipleSelection: [],
+                dialogFormVisible: false,
+                formLabelWidth: '100px',
+                form: {
+                    goodsId: '',
+                    image: '',
+                    goodsName: '',
+                    sellPrice: '',
+                    goodsIntroduce: '',
+                    stock: ''
+                }
             }
         },
         methods: {
             // 获取新闻列表
             getArticle() {
-                let params = this.currentPage;
-                getNewsList(params).then(res => {
+                // let params = this.currentPage;
+                let params = {
+                    goodsId: '',
+                    orderNum:"",
+                    pageNum: this.currentPage,
+                    pageSize: 10,
+                };
+                getGoodsList(params).then(res => {
                     for (let i in res.list) {
                         res.list[i].time = this.changeTime(res.list[i].time)
                     }
-                    this.tableData = res.list;
-                    this.total = res.total;
+                    // console.log(JSON.stringify(res.data));
+                    this.tableData = res.data;
+                    this.total = res.code;
                 })
             },
             toggleSelection(rows) {
@@ -185,13 +239,25 @@
                     }
                 })
             },
+            // 编辑
             handleEdit(index,row) {
-                this.$router.push({
-                    name: 'newsnoticemarkdown',
-                    params: {
-                        type: 'editNews',
-                        nid: row.nid
-                    }
+                this.dialogFormVisible = true;
+                this.form = row; 
+            },
+            // 确认编辑
+            assureEdit () {
+                let params = {
+                    goodsId: this.form.goodsId,
+                    goodsName: this.form.goodsName,
+                    sellPrice: this.form.sellPrice,
+                    stock: this.form.stock,
+                    goodsIntroduce: this.goodsIntroduce
+                }
+                console.log(params);
+                editGoodsInfo(params).then(res => {
+                    this.dialogFormVisible = false;
+                    this.$message.success('操作成功！');
+                    this.getArticle()
                 })
             },
             delAll() {
@@ -212,13 +278,17 @@
                 this.del_case = row;
                 this.idx = index;
                 this.delVisible = true;
+                this.goodsId = row.goodsId;
             },
             // 确认删除
             deleteRow(){
-                let params = this.del_case.nid;  // 要确定cid的数据类型
-                deleteNews(params).then(res => {
+                // let params = this.del_case.nid;  // 要确定cid的数据类型
+                let params = {
+                    goodsId: this.goodsId,
+                };
+                deleteGoods(params).then(res => {
                     // 返回值是字符串
-                    this.$message.success(res);
+                    this.$message.success('删除成功！');
                     this.delVisible = false;
                     this.getArticle()
                 })
@@ -251,7 +321,8 @@
     .news-img {
         position: relative;
         padding-bottom: 50%;
-        width: 100%;
+        width: 80%;
+        height: 100px;
     }
     .news-img > img {
         position: absolute;
@@ -259,7 +330,6 @@
         height: 100%;
         top: 0;
         left: 0;
-        border-radius: 5px;
     }
     .el-icon-delete, .el-icon-edit {
         margin-left: 10px;

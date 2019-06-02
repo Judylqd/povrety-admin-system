@@ -8,8 +8,8 @@
         <div class="container">
             <template>
                 <div style="margin-top: 20px">
-                    <el-button type="primary" @click="delAll()">批量删除</el-button>
-                    <el-button @click="toggleSelection()">取消选择</el-button>
+                    <!-- <el-button type="primary" @click="delAll()">批量删除</el-button>
+                    <el-button @click="toggleSelection()">取消选择</el-button> -->
                 </div>
                 <el-table
                     ref="multipleTable"
@@ -17,49 +17,48 @@
                     @selection-change="handleSelectionChange"
                     tooltip-effect="dark"
                     style="width: 100%">
-                    <el-table-column
+                    <!-- <el-table-column
                     type="selection"
                     width="30">
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column
                     label="投资者ID"
-                    prop="newsTitle"
-                    width="130">
+                    prop="id"
+                    width="80">
                     </el-table-column>
                     <el-table-column
                     label="姓名"
-                    prop="newsTitle"
-                    width="120">
+                    prop="investorName"
+                    width="100">
                     </el-table-column>
                     <el-table-column
                     label="邮箱"
-                    prop="newsTitle"
-                    width="120">
+                    prop="investorEmail"
+                    width="180">
                     </el-table-column>
                     <el-table-column
                     label="联系方式"
-                    prop="newsTitle"
-                    width="120">
+                    prop="investorPhone"
+                    width="130">
                     </el-table-column>
                     <el-table-column
                     label="投资意向"
-                    prop="time"
-                    width="280">
+                    prop="investorAim"
+                    >
                     </el-table-column>
                     <el-table-column
-                    label="投资金额"
-                    prop="newsTitle"
+                    label="投资金额(万)"
+                    prop="investorMoney"
                     width="100">
                     </el-table-column>
                     <el-table-column
                     label="操作"
-                    width="180">
+                    width="80">
                         <template slot-scope="scope">
-                            <el-button size="small" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
+                            <!-- <el-button size="small" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button> -->
                             <el-button size="small" type="danger" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column></el-table-column>
                 </el-table>
                 <div class="block">
                     <el-pagination
@@ -77,14 +76,14 @@
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteRow">确 定</el-button>
+                <el-button type="primary" @click="deleteRow(id)">确 定</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
-    import { getNewsList, deleteNews, deleteNewsList } from '../../api.js'
+    import { getInvestorList, deleteInvestor, deleteNewsList } from '../../api.js'
     export default {
         name: 'investor',
         data () {
@@ -151,15 +150,18 @@
             }
         },
         methods: {
-            // 获取新闻列表
+            // 获取投资者列表
             getArticle() {
-                let params = this.currentPage;
-                getNewsList(params).then(res => {
+                // let params = this.currentPage;
+                let params = {
+                    pageNum: this.currentPage,
+                };
+                getInvestorList(params).then(res => {
                     for (let i in res.list) {
                         res.list[i].time = this.changeTime(res.list[i].time)
                     }
-                    this.tableData = res.list;
-                    this.total = res.total;
+                    this.tableData = res.data;
+                    this.total = res.code;
                 })
             },
             toggleSelection(rows) {
@@ -203,13 +205,17 @@
                 this.del_case = row;
                 this.idx = index;
                 this.delVisible = true;
+                this.id = row.id;
             },
             // 确认删除
             deleteRow(){
-                let params = this.del_case.nid;  // 要确定cid的数据类型
-                deleteNews(params).then(res => {
+                // let params = this.del_case.nid;  // 要确定cid的数据类型
+                let params = {
+                    id: this.id,
+                };
+                deleteInvestor(params).then(res => {
                     // 返回值是字符串
-                    this.$message.success(res);
+                    this.$message.success('删除成功');
                     this.delVisible = false;
                     this.getArticle()
                 })
