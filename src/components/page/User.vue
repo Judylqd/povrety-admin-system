@@ -96,7 +96,7 @@
                 multipleSelection: [],
                 delVisible: false,
                 // disabled: true,
-                pagesize: 10,
+                pagesize: 8,
                 isUserid: true,
                 isName: true, //名字是否禁用
                 isAdd: false,
@@ -136,7 +136,7 @@
                     for (let i in res.list) {
                         res.list[i].time = this.changeTime(res.list[i].time)
                     }
-                    // console.log(JSON.stringify(res.data));
+                    console.log(JSON.stringify(res.data));
                     this.tableData = res.data;
                     this.total = res.code;
                 })
